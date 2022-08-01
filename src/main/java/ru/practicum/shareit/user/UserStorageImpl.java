@@ -71,7 +71,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     private Long generateId() {
-        idCounter ++;
+        idCounter++;
         return idCounter;
     }
 
