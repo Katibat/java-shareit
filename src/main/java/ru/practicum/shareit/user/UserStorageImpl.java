@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
-import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserStorage;
 
 import java.util.*;
 
@@ -73,7 +71,7 @@ public class UserStorageImpl implements UserStorage {
     }
 
     private Long generateId() {
-        idCounter += 1;
+        idCounter ++;
         return idCounter;
     }
 

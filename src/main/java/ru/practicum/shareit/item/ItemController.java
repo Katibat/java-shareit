@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/items")
 public class ItemController {
-    ItemService service;
+    private final ItemService service;
 
     @Autowired
     public ItemController(ItemService service) {

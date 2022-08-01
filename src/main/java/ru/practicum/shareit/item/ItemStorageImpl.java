@@ -131,7 +131,7 @@ public class ItemStorageImpl implements ItemStorage {
     }
 
     private Long generateId() {
-        idCounter += 1;
+        idCounter ++;
         return idCounter;
     }
 }
