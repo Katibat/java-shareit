@@ -46,10 +46,10 @@ public class ItemStorageImpl implements ItemStorage {
                     "ей не владеющего", itemId, userId);
             throw new ForbiddenException("Пользователю не доступно редактирование вещи с идентификатором № " + itemId);
         }
-        if (updateItem.getName() != null && !updateItem.getName().isBlank()) {
+        if (updateItem.getName() != null) {
             item.setName(updateItem.getName());
         }
-        if (updateItem.getDescription() != null && !updateItem.getDescription().isBlank()) {
+        if (updateItem.getDescription() != null) {
             item.setDescription(updateItem.getDescription());
         }
         if (updateItem.getAvailable() != null) {

@@ -7,20 +7,16 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @AllArgsConstructor
 public class Item {
     private Long id;
-    @NotNull
-    @NotBlank
+    @NotBlank(groups = {Update.class})
     private String name;
-    @NotNull
-    @NotBlank
+    @NotBlank(groups = {Update.class})
     private String description;
-    @NotNull
     private Boolean available;
     private User owner;
     private ItemRequest request;

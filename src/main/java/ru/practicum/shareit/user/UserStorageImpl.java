@@ -2,6 +2,7 @@ package ru.practicum.shareit.user;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.UserAlreadyExistException;
 
@@ -9,6 +10,7 @@ import java.util.*;
 
 @Slf4j
 @Repository
+@Validated
 public class UserStorageImpl implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
     private Long idCounter = 0L;
@@ -18,17 +20,20 @@ public class UserStorageImpl implements UserStorage {
         checkUniqueEmail(user.getEmail());
         user.setId(generateId());
         users.put(user.getId(), user);
-            log.debug("Создан пользователь с идентификатором № {}.", user.getId());
-            return user;
+        log.debug("Создан пользователь с идентификатором № {}.", user.getId());
+        return user;
     }
 
     @Override
     public User update(Long userId, User updateUser) {
         User user = getById(userId);
-        if (updateUser.getName() != null && !updateUser.getName().isBlank()) {
+        // пользователь может обновлять только емаил, тогда имя может быть передано пустым или с пробелом
+        // проверка для того чтобы имя не стало null
+        if (updateUser.getName() != null) {
             user.setName(updateUser.getName());
         }
-        if (updateUser.getEmail() != null && !updateUser.getEmail().isBlank()) {
+        // если при обновлении данных передается новый емаил, то проверить адрес емаил на уникальность
+        if (updateUser.getEmail() != null) {
             if (!user.getEmail().equals(updateUser.getEmail())) {
                 checkUniqueEmail(updateUser.getEmail());
             }
@@ -78,8 +83,7 @@ public class UserStorageImpl implements UserStorage {
     private void checkUniqueEmail(String email) {
         for (User user : users.values()) {
             if (user.getEmail().equals(email)) {
-                log.warn("При создании пользователя передан уже используемый адрес электронной почты {}",
-                        user.getEmail());
+                log.warn("При создании пользователя передан уже используемый адрес электронной почты {}", user.getEmail());
                 throw new UserAlreadyExistException("Пользователь с указанной электронной почтой уже создан.");
             }
         }
