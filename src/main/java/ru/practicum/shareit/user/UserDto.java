@@ -8,15 +8,16 @@ import ru.practicum.shareit.item.Update;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class User {
-    private Long id;
-    @NotBlank(groups = {Update.class})
-    private String name;
-    @NotBlank(groups = {Update.class})
+public class UserDto {
+    private final Long id;
+    @NotBlank(groups = {Create.class})
+    private final String name;
     @Email(groups = {Update.class, Create.class})
-    private String email;
+    @NotNull(groups = {Create.class})
+    private final String email;
 }
