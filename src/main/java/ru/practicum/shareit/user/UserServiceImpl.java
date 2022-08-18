@@ -12,12 +12,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
 
     @Override
-//    @Transactional
+    @Transactional
     public User save(User user) {
         if (user.getEmail() == null || user.getName() == null) {
             throw new ValidationException("Обязательные поля для создания пользователя не заполнены.");
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public User update(Long userId, User user) {
         User updateUser = findById(userId);
         if (user.getName() != null) {
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void deleteById(Long userId) {
         repository.deleteById(userId);
     }

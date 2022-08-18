@@ -21,14 +21,14 @@ public class ItemController {
 
     @PostMapping // добавить новую вещь
     public ItemDto create(@Valid @RequestBody ItemDto itemDto,
-                        @RequestHeader(name = "X-Sharer-User-Id") Long userId) {
+                          @RequestHeader(name = "X-Sharer-User-Id") Long userId) {
         Item item = ItemMapper.toItemNew(itemDto);
         return ItemMapper.toItemDto(service.save(item, userId));
     }
 
     @PatchMapping("/{itemId}") // редактировать вещь по идентификатору
     public ItemDto update(@PathVariable Long itemId,
-                       @RequestHeader(name = "X-Sharer-User-Id") Long userId,
+                          @RequestHeader(name = "X-Sharer-User-Id") Long userId,
                           @RequestBody ItemDto itemDto) {
         itemDto.setId(itemId);
         Item item = ItemMapper.toItem(itemDto);
@@ -68,8 +68,8 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment") // добавить новый отзыв об использовании вещи
     public CommentDto saveComment(@Valid @RequestBody CommentDto commentDto,
-                                 @RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                 @PathVariable Long itemId) {
+                                  @RequestHeader(name = "X-Sharer-User-Id") Long userId,
+                                  @PathVariable Long itemId) {
         Comment comment = CommentMapper.toComment(commentDto);
         return CommentMapper.toCommentDto(service.saveComment(userId, itemId, comment));
     }

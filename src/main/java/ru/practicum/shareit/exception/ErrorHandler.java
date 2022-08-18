@@ -1,6 +1,5 @@
 package ru.practicum.shareit.exception;
 
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -32,24 +31,6 @@ public class ErrorHandler {
     public ErrorResponse handleValidationStateException(final StateException e) {
         return new ErrorResponse(e.getMessage());
     }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleItemValidationException(final ItemValidationException e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBookingValidationException(final BookingValidationException e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-//    @ExceptionHandler
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public ErrorResponse handleThrowable(final RuntimeException e) {
-//        return new ErrorResponse(e.getMessage());
-//    }
 
     private static class ErrorResponse {
         private final String error;

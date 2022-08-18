@@ -8,18 +8,17 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.comment.CommentRepository;
-import ru.practicum.shareit.exception.ItemValidationException;
+import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.UserService;
 
-import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
 @Validated
 @RequiredArgsConstructor
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
     private final CommentRepository commentRepository;
@@ -27,14 +26,14 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
 
     @Override
-//    @Transactional
+    @Transactional
     public Item save(Item item, Long userId) {
         item.setOwner(userService.findById(userId));
         return repository.save(item);
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public Item update(Long userId, Item item) {
         Item itemUpdate = repository.findById(item.getId())
                 .orElseThrow(() ->
@@ -56,7 +55,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void deleteById(Long itemId) {
         repository.deleteById(itemId);
     }
@@ -84,11 +83,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public Comment saveComment(Long userId, Long itemId, Comment comment) {
         Booking booking = bookingRepository.findCompletedBooking(userId, itemId, LocalDateTime.now());
         if (booking == null) {
-            throw new ItemValidationException("Не найдено бронирование вещи для пользователя " +
+            throw new ValidationException("Не найдено бронирование вещи для пользователя " +
                     "с идентификатором № " + userId);
         }
         comment.setItem(repository.findById(itemId)

@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -19,17 +20,15 @@ import java.util.*;
 @Service
 @Validated
 @RequiredArgsConstructor
-//@Transactional(readOnly = true)
+@Transactional(readOnly = true)
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository repository;
     private final ItemService itemService;
     private final UserService userService;
 
     @Override
-//    @Transactional
+    @Transactional
     public Booking save(Booking booking, Long userId, Long itemId) {
-        log.info("++++++++++++++СОЗДАНИЕ БРОНИРОВАНИЯ+++++++++++++++++++++++++");
-        log.info("ПОЛЬЗОВАТЕЛЬ {} и вещь {}", userId, itemId);
         Item item = itemService.findById(itemId);
         User user = userService.findById(userId);
         if (user.getId().equals(item.getOwner().getId()) && userId.equals(item.getOwner().getId())) {
@@ -52,14 +51,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void deleteById(Long bookingId) {
         log.info("Удалено бронирование вещи {}.", bookingId);
         repository.deleteById(bookingId);
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public Booking changeBookingStatus(Long userId, Long bookingId, Boolean approved) {
         User user = userService.findById(userId);
         Booking booking = findById(userId, bookingId);
