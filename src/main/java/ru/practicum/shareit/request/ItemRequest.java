@@ -1,21 +1,29 @@
 package ru.practicum.shareit.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.User;
 
-import javax.validation.constraints.FutureOrPresent;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "item_requests")
 public class ItemRequest {
-    private final Long id;
-    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotBlank
-    private final String description;
-    private final User requestor;
-    @NotNull
-    @FutureOrPresent
-    private final LocalDateTime created;
+    private String description;
+    @ManyToOne
+    @JoinColumn(name = "requester_id")
+    private User requester; // опечатка в ТЗ
+    private LocalDateTime created = LocalDateTime.now();
 }

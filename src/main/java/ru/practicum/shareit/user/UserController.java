@@ -1,50 +1,47 @@
 package ru.practicum.shareit.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.Create;
-import ru.practicum.shareit.item.Update;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Validated
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/users")
 public class UserController {
     private final UserService service;
 
-    @Autowired
-    public UserController(UserService service) {
-        this.service = service;
-    }
-
     @PostMapping // добавить новых пользователей
-    public UserDto create(@Validated(Create.class) @RequestBody UserDto userDto) {
+    public UserDto create(@Valid @RequestBody UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(service.create(user));
+        return UserMapper.toUserDto(service.save(user));
     }
 
-    @PatchMapping("/{id}") // редактировать данные пользователя
-    public UserDto update(@PathVariable("id") Long userId,
-                       @Validated(Update.class) @RequestBody UserDto userDto) {
-        User updateUser = UserMapper.toUser(userDto);
-        return UserMapper.toUserDto(service.update(userId, updateUser));
+    @PatchMapping("/{userId}") // редактировать данные пользователя
+    public UserDto update(@PathVariable Long userId,
+                       @Valid @RequestBody UserDto userDto) {
+        userDto.setId(userId);
+        User user = UserMapper.toUser(userDto);
+        return UserMapper.toUserDto(service.update(userId, user));
     }
 
-    @DeleteMapping("/{id}") // удалить пользователя
-    public void deleteUserById(@PathVariable("id") Long userId) {
-        service.delete(userId);
+    @DeleteMapping("/{userId}") // удалить пользователя
+    public void deleteById(@PathVariable Long userId) {
+        service.deleteById(userId);
     }
 
-    @GetMapping("/{id}") // искать пользователя по идентификатору
-    public UserDto getUserById(@PathVariable("id") Long userId) {
-        return UserMapper.toUserDto(service.getById(userId));
+    @GetMapping("/{userId}") // искать пользователя по идентификатору
+    public UserDto findById(@PathVariable Long userId) {
+        return UserMapper.toUserDto(service.findById(userId));
     }
 
     @GetMapping // получить список всех пользователей
-    public List<UserDto> getAllUsers() {
-        return service.getAllUsers()
+    public List<UserDto> findAll() {
+        return service.findAll()
                 .stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
