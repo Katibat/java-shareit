@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS items (
     name VARCHAR(255)                               NOT NULL,
     description VARCHAR(512)                        NOT NULL,
     is_available BOOLEAN                            NOT NULL,
-    owner_id BIGINT NOT NULL REFERENCES users ON DELETE CASCADE,
+    owner_id BIGINT                                 NOT NULL,
     request_id BIGINT                                       ,
     CONSTRAINT PK_ITEMS PRIMARY KEY (id),
---     CONSTRAINT FK_ITEM_ON_OWNER FOREIGN KEY (owner_id) REFERENCES users (id),
+    CONSTRAINT FK_ITEM_ON_OWNER FOREIGN KEY (owner_id) REFERENCES users (id),
     CONSTRAINT FK_ITEM_ON_REQUEST FOREIGN KEY (request_id) REFERENCES item_requests (id),
     CONSTRAINT UQ_OWNER_ITEM_NAME UNIQUE (owner_id, name)
 );

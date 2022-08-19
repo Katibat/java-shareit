@@ -27,7 +27,6 @@ public class ItemMapper {
 
     public static Item toItemNew(ItemDto itemDto) {
         return Item.builder()
-                .id(null)
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())

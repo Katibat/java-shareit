@@ -22,20 +22,14 @@ public class BookingMapper {
                 .id(bookingDto.getId())
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())
-                .item(null) // null
-                .booker(null) // null
                 .status(bookingDto.getStatus())
                 .build();
     }
 
     public static Booking toBookingNew(BookingDtoNew bookingDtoNew) {
         return Booking.builder()
-                .id(null) // null
                 .start(bookingDtoNew.getStart())
                 .end(bookingDtoNew.getEnd())
-                .item(null) // null
-                .booker(null) // null
-                .status(null)
                 .build();
     }
 }
