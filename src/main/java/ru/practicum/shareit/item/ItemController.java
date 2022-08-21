@@ -8,8 +8,8 @@ import ru.practicum.shareit.comment.CommentDto;
 import ru.practicum.shareit.comment.CommentMapper;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,7 +41,7 @@ public class ItemController {
         Item item = service.findById(itemId);
         ItemDto itemDto = ItemMapper.toItemDto(item);
         addComments(itemDto);
-        if (Objects.equals(item.getOwner().getId(), userId)) {
+        if (item.getOwner().getId().equals(userId)) {
             addLastAndNextBooking(itemDto);
         }
         return itemDto;

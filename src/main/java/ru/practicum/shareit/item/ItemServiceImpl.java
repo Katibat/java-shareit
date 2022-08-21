@@ -6,14 +6,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
+import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.comment.Comment;
+import ru.practicum.shareit.comment.CommentDto;
+import ru.practicum.shareit.comment.CommentMapper;
 import ru.practicum.shareit.comment.CommentRepository;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Validated
@@ -24,6 +29,7 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final BookingRepository bookingRepository;
+//    private final BookingService bookingService;
 
     @Override
     @Transactional
@@ -62,9 +68,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item findById(Long itemId) {
-        return repository.findById(itemId)
+        Item item = repository.findById(itemId)
                 .orElseThrow(() ->
                         new NotFoundException("Не найдена вещь с идентификатором № " + itemId));
+
+        return item;
     }
 
     @Override
@@ -100,4 +108,24 @@ public class ItemServiceImpl implements ItemService {
     public List<Comment> getAllCommentsByItem(Long itemId) {
         return commentRepository.findAllCommentsByItemId(itemId);
     }
+
+//    private void addComments(Item item) {
+//        List<Comment> list = new ArrayList<>(getAllCommentsByItem(item.getId()));
+//        item.setComments(list);
+//    }
+
+
+//    private void addComments(Item item) {
+//        List<Comment> list = new ArrayList<>(getAllCommentsByItem(item.getId()));
+//        item.setComments(list);
+//    }
+//
+//    private void addLastAndNextBooking(Item item) {
+//        if (bookingRepository.findLastBooking(item.getId(), LocalDateTime.now()) != null) {
+//            item.setLastBooking((Booking) bookingRepository.findLastBooking(item.getId(), LocalDateTime.now()));
+//        }
+//        if (bookingRepository.findNextBooking(item.getId(), LocalDateTime.now()) != null) {
+//            item.setNextBooking((Booking) bookingRepository.findNextBooking(item.getId(), LocalDateTime.now()));
+//        }
+//    }
 }

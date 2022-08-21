@@ -107,7 +107,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> findAllByBooker(Long userId, String state) {
-        userService.findById(userId);
+        userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;
         try {
@@ -141,7 +141,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> findAllByOwner(Long userId, String state) {
-        userService.findById(userId);
+        userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;
         try {
@@ -174,12 +174,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public Optional<Booking> findLastBooking(Long itemId) {
-        return repository.findLastBookings(itemId, LocalDateTime.now())
+        return repository.findLastBooking(itemId, LocalDateTime.now())
                 .stream().findFirst();
     }
 
     public Optional<Booking> findNextBooking(Long itemId) {
-        return repository.findNextBookings(itemId, LocalDateTime.now())
+        return repository.findNextBooking(itemId, LocalDateTime.now())
                 .stream().findFirst();
     }
 }

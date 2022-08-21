@@ -58,4 +58,10 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public void checkIsUserExists(Long userId) {
+        if (!repository.existsById(userId))
+            throw new NotFoundException("Не найден пользователь с идентификатором № " + userId);
+    }
 }

@@ -77,11 +77,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "WHERE    b.item.id = ?1 " +
             "AND      b.end < ?2 " +
             "ORDER BY b.end DESC ")
-    List<Booking> findLastBookings(Long itemId, LocalDateTime end);
+    List<Booking> findLastBooking(Long itemId, LocalDateTime end);
 
     @Query("SELECT    b FROM Booking AS b " +
             "WHERE    b.item.id = ?1 " +
             "AND      b.start > ?2 " +
             "ORDER BY b.start ASC ")
-    List<Booking> findNextBookings(Long itemId, LocalDateTime start);
+    List<Booking> findNextBooking(Long itemId, LocalDateTime start);
 }
