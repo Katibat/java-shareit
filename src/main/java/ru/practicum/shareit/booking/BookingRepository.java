@@ -66,11 +66,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             "ORDER BY b.start DESC ")
     List<Booking> findByOwnerIdAndStatus(Long userId, BookingStatus bookingStatus);
 
-    @Query("SELECT b FROM Booking AS b " +
-            "WHERE b.booker.id = ?1 " +
-            "AND   b.item.id = ?2 " +
-            "AND   b.end < ?3 " +
-            "AND   b.status = 'APPROVED'")
+    @Query("SELECT    b FROM Booking AS b " +
+            "WHERE    b.booker.id = ?1 " +
+            "AND      b.item.id = ?2 " +
+            "AND      b.end < ?3 " +
+            "AND      b.status = 'APPROVED'")
     Booking findCompletedBooking(Long userId, Long itemId, LocalDateTime now);
 
     @Query("SELECT    b FROM Booking AS b " +

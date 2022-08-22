@@ -1,25 +1,24 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingRepository;
-import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.comment.Comment;
-import ru.practicum.shareit.comment.CommentDto;
 import ru.practicum.shareit.comment.CommentMapper;
 import ru.practicum.shareit.comment.CommentRepository;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @Validated
 @RequiredArgsConstructor
@@ -29,12 +28,12 @@ public class ItemServiceImpl implements ItemService {
     private final CommentRepository commentRepository;
     private final UserService userService;
     private final BookingRepository bookingRepository;
-//    private final BookingService bookingService;
 
     @Override
     @Transactional
     public Item save(Item item, Long userId) {
         item.setOwner(userService.findById(userId));
+        log.info("Создана вещь № {} пользователем № {}.", item.getId(), userId);
         return repository.save(item);
     }
 
@@ -57,6 +56,7 @@ public class ItemServiceImpl implements ItemService {
         if (item.getAvailable() != null) {
             itemUpdate.setAvailable(item.getAvailable());
         }
+        log.info("Обновлена информация о вещи № {}.", item.getId());
         return repository.save(itemUpdate);
     }
 
@@ -64,21 +64,45 @@ public class ItemServiceImpl implements ItemService {
     @Transactional
     public void deleteById(Long itemId) {
         repository.deleteById(itemId);
+        log.info("Удалена вещь № {}.", itemId);
     }
 
     @Override
     public Item findById(Long itemId) {
-        Item item = repository.findById(itemId)
+        return repository.findById(itemId)
                 .orElseThrow(() ->
                         new NotFoundException("Не найдена вещь с идентификатором № " + itemId));
+    }
 
-        return item;
+    @Override
+    public ItemDto getItemById(Long itemId, Long userId) {
+        Item item = findById(itemId);
+        ItemDto itemDto = ItemMapper.toItemDto(item);
+        getComments(itemDto);
+        if (itemDto.getOwner().getId().equals(userId)) {
+            getLastAndNextBooking(itemDto);
+            log.info("Передана информация о вещи {} ее собственнику {}.", item, userId);
+        }
+        log.debug("Передана вещь {}.", itemDto);
+        return itemDto;
     }
 
     @Override
     public List<Item> getAllByOwnerId(Long userId) {
         List<Item> itemList = repository.findAllByOwnerId(userId);
         itemList.sort(Comparator.comparing(Item::getId));
+        return itemList;
+    }
+
+    @Override
+    public List<ItemDto> getAllByOwnerIdFull(Long userId) {
+        List<ItemDto> itemList = getAllByOwnerId(userId)
+                .stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
+        itemList.forEach(this::getLastAndNextBooking);
+        itemList.forEach(this::getComments);
+        log.info("Передан список вещей {} их собственнику {}.", itemList, userId);
         return itemList;
     }
 
@@ -101,31 +125,36 @@ public class ItemServiceImpl implements ItemService {
         comment.setItem(repository.findById(itemId)
                 .orElseThrow(() -> new NotFoundException("Не найдена вещь с идентификатором № " + itemId)));
         comment.setAuthor(userService.findById(userId));
+        log.info("Сохранен комментарий {} о бронировании вещи № {}.", comment, itemId);
         return commentRepository.save(comment);
     }
 
     @Override
     public List<Comment> getAllCommentsByItem(Long itemId) {
+        log.info("Получен список комментариев о бронировании вещи № {}.", itemId);
         return commentRepository.findAllCommentsByItemId(itemId);
     }
 
-//    private void addComments(Item item) {
-//        List<Comment> list = new ArrayList<>(getAllCommentsByItem(item.getId()));
-//        item.setComments(list);
-//    }
-
-
-//    private void addComments(Item item) {
-//        List<Comment> list = new ArrayList<>(getAllCommentsByItem(item.getId()));
-//        item.setComments(list);
-//    }
-//
-//    private void addLastAndNextBooking(Item item) {
-//        if (bookingRepository.findLastBooking(item.getId(), LocalDateTime.now()) != null) {
-//            item.setLastBooking((Booking) bookingRepository.findLastBooking(item.getId(), LocalDateTime.now()));
-//        }
-//        if (bookingRepository.findNextBooking(item.getId(), LocalDateTime.now()) != null) {
-//            item.setNextBooking((Booking) bookingRepository.findNextBooking(item.getId(), LocalDateTime.now()));
-//        }
-//    }
+    void getComments(ItemDto itemDto) {
+        itemDto.setComments(getAllCommentsByItem(itemDto.getId()).stream()
+                .map(CommentMapper::toCommentDto)
+                .collect(Collectors.toList()));
+        log.info("Сохранен список комментариев: {} о бронировании вещи № {}.",
+                itemDto.getComments(), itemDto.getId());
+    }
+@Transactional
+    void getLastAndNextBooking(ItemDto itemDto) {
+        if (!bookingRepository.findLastBooking(itemDto.getId(), LocalDateTime.now()).isEmpty()) {
+            itemDto.setLastBooking(bookingRepository.findLastBooking(itemDto.getId(), LocalDateTime.now())
+                    .stream().findFirst());
+            log.info("Получено и сохранено время последнего бронирования для вещи № {} время: {}.",
+                    itemDto.getId(), itemDto.getLastBooking());
+        }
+        if (!bookingRepository.findNextBooking(itemDto.getId(), LocalDateTime.now()).isEmpty()) {
+            itemDto.setNextBooking(bookingRepository.findNextBooking(itemDto.getId(), LocalDateTime.now())
+                    .stream().findFirst());
+            log.info("Получено и сохранено время следующего бронирования для вещи № {} время: {}.",
+                    itemDto.getId(), itemDto.getLastBooking());
+        }
+    }
 }

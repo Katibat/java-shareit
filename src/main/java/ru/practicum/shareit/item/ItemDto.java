@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.comment.CommentDto;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Builder
@@ -21,6 +23,7 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+    @JsonIgnore
     private UserDto owner;
     private BookingDto lastBooking;
     private BookingDto nextBooking;
@@ -48,24 +51,24 @@ public class ItemDto {
         this.comments = comments;
     }
 
-    public void setLastBooking(Booking booking) {
-        if (booking != null) {
+    public void setLastBooking(Optional<Booking> booking) {
+        if (booking.isPresent()) {
             this.lastBooking  = new BookingDto(
-                    booking.getId(),
-                    booking.getBooker().getId(),
-                    booking.getStart(),
-                    booking.getEnd()
+                    booking.get().getId(),
+                    booking.get().getBooker().getId(),
+                    booking.get().getStart(),
+                    booking.get().getEnd()
             );
         }
     }
 
-    public void setNextBooking(Booking booking) {
-        if (booking != null) {
+    public void setNextBooking(Optional<Booking> booking) {
+        if (booking.isPresent()) {
             this.nextBooking  = new BookingDto(
-                    booking.getId(),
-                    booking.getBooker().getId(),
-                    booking.getStart(),
-                    booking.getEnd()
+                    booking.get().getId(),
+                    booking.get().getBooker().getId(),
+                    booking.get().getStart(),
+                    booking.get().getEnd()
             );
         }
     }
