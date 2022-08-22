@@ -142,7 +142,8 @@ public class ItemServiceImpl implements ItemService {
         log.info("Сохранен список комментариев: {} о бронировании вещи № {}.",
                 itemDto.getComments(), itemDto.getId());
     }
-@Transactional
+
+    @Transactional
     void getLastAndNextBooking(ItemDto itemDto) {
         if (!bookingRepository.findLastBooking(itemDto.getId(), LocalDateTime.now()).isEmpty()) {
             itemDto.setLastBooking(bookingRepository.findLastBooking(itemDto.getId(), LocalDateTime.now())
