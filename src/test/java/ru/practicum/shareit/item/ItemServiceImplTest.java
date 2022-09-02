@@ -191,8 +191,8 @@ public class ItemServiceImplTest {
         Mockito.when(repository.findAllByOwnerId(1L,
                         PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"))))
                 .thenReturn(List.of(item));
-        Mockito.when(bookingRepository.findLastBooking(1L, LocalDateTime.MIN)).thenReturn(null);
-        Mockito.when(bookingRepository.findNextBooking(1L, LocalDateTime.MIN)).thenReturn(null);
+        Mockito.when(bookingRepository.findLastBooking(1L, LocalDateTime.now())).thenReturn(null);
+        Mockito.when(bookingRepository.findNextBooking(1L, LocalDateTime.now())).thenReturn(null);
         Mockito.when(commentRepository.findAllCommentsByItemId(1L)).thenReturn((List.of(comment)));
         List<Item> itemList = service.getAllByOwnerId(0, 10, 1L)
                 .stream()
