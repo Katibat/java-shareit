@@ -1,12 +1,15 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Validated
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
@@ -39,20 +42,20 @@ public class BookingController {
     }
 
     @GetMapping // получить список всех бронирований
-    public List<BookingDto> getAllByBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<BookingDto> getAllByBooker(@RequestParam(value = "from", defaultValue = "0")
+                                           @PositiveOrZero int fromPage,
+                                           @RequestParam(defaultValue = "10") @Positive int size,
+                                           @RequestHeader("X-Sharer-User-Id") Long userId,
                                            @RequestParam(defaultValue = "ALL") String state) {
-        return service.findAllByBooker(userId, state)
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+        return service.findAllByBooker(fromPage, size, userId, state);
     }
 
     @GetMapping("/owner") // получить список всех бронирований собственника вещей
-    public List<BookingDto> findAllByOwner(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<BookingDto> findAllByOwner(@RequestParam(value = "from", defaultValue = "0")
+                                           @PositiveOrZero int fromPage,
+                                           @RequestParam(defaultValue = "10") @Positive int size,
+                                           @RequestHeader("X-Sharer-User-Id") Long userId,
                                            @RequestParam(defaultValue = "ALL") String state) {
-        return service.findAllByOwner(userId, state)
-                .stream()
-                .map(BookingMapper::toBookingDto)
-                .collect(Collectors.toList());
+        return service.findAllByOwner(fromPage, size, userId, state);
     }
 }

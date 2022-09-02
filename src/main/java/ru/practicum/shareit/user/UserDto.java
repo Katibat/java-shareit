@@ -11,7 +11,8 @@ import javax.validation.constraints.Email;
 @AllArgsConstructor
 public class UserDto {
     private Long id;
-    private String name;
+    private String name; // для прохождения тестов валидацию аннотациями пришлось снять,
+    // передаются пустые полями для обновления и код ответа должен быть 200
     @Email
     private String email;
 }

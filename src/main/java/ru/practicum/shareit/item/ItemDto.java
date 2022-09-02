@@ -23,8 +23,8 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
-    @JsonIgnore
     private UserDto owner;
+    private Long requestId;
     private BookingDto lastBooking;
     private BookingDto nextBooking;
     private List<CommentDto> comments;

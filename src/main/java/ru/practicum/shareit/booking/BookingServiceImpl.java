@@ -2,6 +2,9 @@ package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -106,10 +109,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<Booking> findAllByBooker(Long userId, String state) {
+    public List<BookingDto> findAllByBooker(int fromPage, int size, Long userId, String state) {
         userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;
+        Pageable pageable = PageRequest.of(fromPage / size, size, Sort.by(Sort.Direction.DESC, "end"));
         try {
             bookingState = BookingState.valueOf(state);
         } catch (IllegalArgumentException e) {
@@ -117,33 +121,34 @@ public class BookingServiceImpl implements BookingService {
         }
         switch (bookingState) {
             case ALL:
-                bookingsList = repository.findAllByBookerId(userId);
+                bookingsList = repository.findAllByBookerId(userId, pageable);
                 break;
             case PAST:
-                bookingsList = repository.findPastByBookerId(userId, LocalDateTime.now());
+                bookingsList = repository.findPastByBookerId(userId, LocalDateTime.now(), pageable);
                 break;
             case FUTURE:
-                bookingsList = repository.findFutureByBookerId(userId, LocalDateTime.now());
+                bookingsList = repository.findFutureByBookerId(userId, LocalDateTime.now(), pageable);
                 break;
             case CURRENT:
-                bookingsList = repository.findCurrentByBookerId(userId, LocalDateTime.now());
+                bookingsList = repository.findCurrentByBookerId(userId, LocalDateTime.now(), pageable);
                 break;
             case WAITING:
-                bookingsList = repository.findByBookerIdAndStatus(userId, BookingStatus.WAITING);
+                bookingsList = repository.findByBookerIdAndStatus(userId, BookingStatus.WAITING, pageable);
                 break;
             case REJECTED:
-                bookingsList = repository.findByBookerIdAndStatus(userId, BookingStatus.REJECTED);
+                bookingsList = repository.findByBookerIdAndStatus(userId, BookingStatus.REJECTED, pageable);
                 break;
         }
         log.info("Передан список забронированых вещей их арендатору {}.", userId);
-        return bookingsList;
+        return BookingMapper.toListDto(bookingsList);
     }
 
     @Override
-    public List<Booking> findAllByOwner(Long userId, String state) {
+    public List<BookingDto> findAllByOwner(int fromPage, int size, Long userId, String state) {
         userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;
+        Pageable pageable = PageRequest.of(fromPage / size, size, Sort.by(Sort.Direction.DESC, "end"));
         try {
             bookingState = BookingState.valueOf(state);
         } catch (IllegalArgumentException e) {
@@ -151,26 +156,26 @@ public class BookingServiceImpl implements BookingService {
         }
         switch (bookingState) {
             case ALL:
-                bookingsList = repository.findAllByOwnerId(userId);
+                bookingsList = repository.findAllByOwnerId(userId, pageable);
                 break;
             case PAST:
-                bookingsList = repository.findPastByOwnerId(userId, LocalDateTime.now());
+                bookingsList = repository.findPastByOwnerId(userId, LocalDateTime.now(), pageable);
                 break;
             case FUTURE:
-                bookingsList = repository.findFutureByOwnerId(userId, LocalDateTime.now());
+                bookingsList = repository.findFutureByOwnerId(userId, LocalDateTime.now(), pageable);
                 break;
             case CURRENT:
-                bookingsList = repository.findCurrentByOwnerId(userId, LocalDateTime.now());
+                bookingsList = repository.findCurrentByOwnerId(userId, LocalDateTime.now(), pageable);
                 break;
             case WAITING:
-                bookingsList = repository.findByOwnerIdAndStatus(userId, BookingStatus.WAITING);
+                bookingsList = repository.findByOwnerIdAndStatus(userId, BookingStatus.WAITING, pageable);
                 break;
             case REJECTED:
-                bookingsList = repository.findByOwnerIdAndStatus(userId, BookingStatus.REJECTED);
+                bookingsList = repository.findByOwnerIdAndStatus(userId, BookingStatus.REJECTED, pageable);
                 break;
         }
         log.info("Передан список забронированых вещей их собственнику {}.", userId);
-        return bookingsList;
+        return BookingMapper.toListDto(bookingsList);
     }
 
     public Optional<Booking> findLastBooking(Long itemId) {

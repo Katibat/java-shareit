@@ -8,6 +8,7 @@ import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -25,5 +26,19 @@ public class ItemRequest {
     @ManyToOne
     @JoinColumn(name = "requester_id")
     private User requester; // опечатка в ТЗ
+    @NotNull
     private LocalDateTime created = LocalDateTime.now();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ItemRequest that = (ItemRequest) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }

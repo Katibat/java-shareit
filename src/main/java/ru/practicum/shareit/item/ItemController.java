@@ -1,22 +1,23 @@
 package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.booking.BookingService;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.comment.CommentDto;
 import ru.practicum.shareit.comment.CommentMapper;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService service;
-    private final BookingService bookingService;
 
     @PostMapping // добавить новую вещь
     public ItemDto create(@Valid @RequestBody ItemDto itemDto,
@@ -34,6 +35,11 @@ public class ItemController {
         return ItemMapper.toItemDto(service.update(userId, item));
     }
 
+    @DeleteMapping("/{itemId}") // удалить вещь
+    public void deleteById(@PathVariable("itemId") Long itemId) {
+        service.deleteById(itemId);
+    }
+
     @GetMapping("/{itemId}") // искать конкретную вещь по идентификатору
     public ItemDto getItemById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                @PathVariable("itemId") Long itemId) {
@@ -41,16 +47,19 @@ public class ItemController {
     }
 
     @GetMapping // получить список всех вещей владельца / пользователя
-    public List<ItemDto> getAllItemByOwner(@RequestHeader("X-Sharer-User-Id") Long userId) {
-        return service.getAllByOwnerIdFull(userId);
+    public List<ItemDto> getAllItemByOwner(@RequestParam(value = "from", defaultValue = "0", required = false)
+                                               @PositiveOrZero int fromPage,
+                                           @RequestParam(defaultValue = "10", required = false) @Positive int size,
+                                           @RequestHeader("X-Sharer-User-Id") Long userId) {
+        return service.getAllByOwnerId(fromPage, size, userId);
     }
 
     @GetMapping("/search") // найти вещи по тексту для потенциальных арендаторов
-    public List<ItemDto> searchItems(@RequestParam(name = "text") String text) {
-        return service.searchItems(text)
-                .stream()
-                .map(ItemMapper::toItemDto)
-                .collect(Collectors.toList());
+    public List<ItemDto> searchItems(@RequestParam(value = "from", defaultValue = "0", required = false)
+                                         @PositiveOrZero int fromPage,
+                                     @RequestParam(defaultValue = "10", required = false) @Positive int size,
+                                     @RequestParam(name = "text") String text) {
+        return service.searchItems(fromPage, size, text);
     }
 
     @PostMapping("/{itemId}/comment") // добавить новый отзыв об использовании вещи
