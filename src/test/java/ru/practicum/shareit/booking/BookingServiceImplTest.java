@@ -54,7 +54,7 @@ public class BookingServiceImplTest {
             .description("itemDescription")
             .available(true)
             .owner(user2)
-            .request(null)
+            .requestId(null)
             .build();
     private final Item item2 = Item.builder()
             .id(2L)
@@ -62,7 +62,7 @@ public class BookingServiceImplTest {
             .description("item2Description")
             .available(false)
             .owner(user2)
-            .request(null)
+            .requestId(null)
             .build();
     private final Booking bookingNew = Booking.builder()
             .id(null)

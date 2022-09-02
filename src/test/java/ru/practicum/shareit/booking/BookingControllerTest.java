@@ -63,7 +63,7 @@ public class BookingControllerTest {
                 .description("itemDescription")
                 .available(true)
                 .owner(user1)
-                .request(null)
+                .requestId(null)
                 .build();
         bookingNew = Booking.builder()
                 .id(null)
