@@ -2,7 +2,6 @@ package ru.practicum.shareit.request;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.user.UserService;
 
 import java.util.ArrayList;
 

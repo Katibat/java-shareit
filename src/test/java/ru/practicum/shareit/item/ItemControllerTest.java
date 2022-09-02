@@ -76,7 +76,7 @@ public class ItemControllerTest {
                 .description("itemDescription")
                 .available(true)
                 .owner(user)
-                .request(null)
+                .requestId(null)
                 .build();
         itemNew = Item.builder()
                 .id(null)
@@ -84,7 +84,7 @@ public class ItemControllerTest {
                 .description("itemDescription")
                 .available(true)
                 .owner(user)
-                .request(null)
+                .requestId(null)
                 .build();
         comment = Comment.builder()
                 .id(1L)

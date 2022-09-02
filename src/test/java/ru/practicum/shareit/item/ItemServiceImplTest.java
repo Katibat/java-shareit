@@ -66,7 +66,7 @@ public class ItemServiceImplTest {
             .description("itemDescription")
             .available(true)
             .owner(user)
-            .request(null)
+            .requestId(null)
             .build();
     private final Item itemNew = Item.builder()
             .id(null)
@@ -74,7 +74,7 @@ public class ItemServiceImplTest {
             .description("itemDescription")
             .available(true)
             .owner(null)
-            .request(null)
+            .requestId(null)
             .build();
     private final CommentDto commentDto = CommentDto.builder()
             .id(1L)

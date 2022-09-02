@@ -27,9 +27,9 @@ public class ItemRepositoryTest {
     private final ItemRequest itemRequest = new ItemRequest(1L, "itemRequestDescription",
             user, LocalDateTime.MIN);
     private final Item itemNew = new Item(null, "item", "itemDescription", true,
-            user, itemRequest);
+            user, itemRequest.getId());
     private final Item item = new Item(1L, "TestItem1", "itemDescription", true,
-            user, itemRequest);
+            user, itemRequest.getId());
 
     @Test
     void searchItemsByTextInNameAndDescription_WithLowAndUpperCase() {

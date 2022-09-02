@@ -22,7 +22,6 @@ public class ItemIntegrationTest {
 
     private final ItemService service;
     private final UserService userService;
-    private final ItemRequestService itemRequestService;
 
     @Test
     public void findAllByOwner() {
