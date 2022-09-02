@@ -56,7 +56,7 @@ public class ItemRequestControllerTest {
                 .description("itemDescription")
                 .available(true)
                 .owner(new User())
-                .request(itemRequest)
+                .requestId(itemRequest.getId())
                 .build();
         user = User.builder()
                 .id(1L)
