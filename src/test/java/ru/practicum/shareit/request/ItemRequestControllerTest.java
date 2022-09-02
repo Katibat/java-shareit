@@ -62,10 +62,10 @@ public class ItemRequestControllerTest {
                 .build();
         itemDto = ItemDto.builder()
                 .id(1L)
-                .name("ItemDtoName")
-                .description("itemDtoDescription")
+                .name("ItemName")
+                .description("itemDescription")
                 .available(true)
-                .owner(new ItemDto.UserDto(1L, "userDto"))
+                .owner(new ItemDto.UserDto())
                 .requestId(1L)
                 .lastBooking(null)
                 .nextBooking(null)

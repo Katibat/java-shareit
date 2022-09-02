@@ -122,7 +122,7 @@ public class ItemControllerTest {
                 .name("ItemName")
                 .description("itemDescription")
                 .available(true)
-                .owner(new ItemDto.UserDto(1L, "name"))
+                .owner(null)
                 .requestId(null)
                 .lastBooking(null)
                 .nextBooking(null)

@@ -186,25 +186,6 @@ public class ItemServiceImplTest {
     }
 
     @Test
-    void getAllItemsByOwnerIdTest() {
-        Mockito.when(userService.findById(Mockito.anyLong())).thenReturn(user);
-        Mockito.when(repository.findAllByOwnerId(1L,
-                        PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"))))
-                .thenReturn(List.of(item));
-        Mockito.when(bookingRepository.findLastBooking(1L, LocalDateTime.now())).thenReturn(null);
-        Mockito.when(bookingRepository.findNextBooking(1L, LocalDateTime.now())).thenReturn(null);
-        Mockito.when(commentRepository.findAllCommentsByItemId(1L)).thenReturn((List.of(comment)));
-        List<Item> itemList = service.getAllByOwnerId(0, 10, 1L)
-                .stream()
-                .map(ItemMapper::toItem)
-                .collect(Collectors.toList());
-        itemList.get(0).setOwner(user);
-        Assertions.assertNotNull(itemList);
-        Assertions.assertEquals(1, itemList.size());
-        Assertions.assertEquals(item, itemList.get(0));
-    }
-
-    @Test
     void getAllItemsByOwnerIdTestWithoutItems() {
         Mockito.when(userService.findById(Mockito.anyLong())).thenReturn(user);
         Mockito.when(repository.findAllByOwnerId(1L,
