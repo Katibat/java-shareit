@@ -139,7 +139,7 @@ public class BookingControllerTest {
         mockMvc.perform(patch("/bookings/1?approved=QWERT")
                         .header("X-Sharer-User-Id", 1L)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is5xxServerError());
     }
 
     @Test

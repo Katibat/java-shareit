@@ -27,7 +27,7 @@ import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemRequestServiceImplTest {
+class ItemRequestServiceImplTest {
     private ItemRequestService service;
     @Mock
     private ItemRequestRepository repository;

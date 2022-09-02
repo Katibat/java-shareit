@@ -28,7 +28,7 @@ public class ItemRepositoryTest {
             user, LocalDateTime.MIN);
     private final Item itemNew = new Item(null, "item", "itemDescription", true,
             user, itemRequest.getId());
-    private final Item item = new Item(1L, "TestItem1", "itemDescription", true,
+    private final Item item = new Item(1L, "item", "itemDescription", true,
             user, itemRequest.getId());
 
     @Test

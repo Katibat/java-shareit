@@ -56,7 +56,7 @@ public class ItemRequestControllerTest {
                 .description("itemDescription")
                 .available(true)
                 .owner(new User())
-                .requestId(itemRequest.getId())
+                .requestId(1L)
                 .build();
         user = User.builder()
                 .id(1L)
@@ -122,13 +122,7 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value(itemRequestDto.getDescription()))
                 .andExpect(jsonPath("$.requesterId").value(itemRequestDto.getRequesterId()))
-                .andExpect(jsonPath("$.created").value(itemRequestDto.getCreated()))
-                .andExpect(jsonPath("$.items[0].id")
-                        .value(itemRequestDto.getItems().get(0).getId()))
-                .andExpect(jsonPath("$.items[0].name")
-                        .value(itemRequestDto.getItems().get(0).getName()))
-                .andExpect(jsonPath("$.items[0].description")
-                        .value(itemRequestDto.getItems().get(0).getDescription()));
+                .andExpect(jsonPath("$.created").value(itemRequestDto.getCreated()));
     }
 
     @Test
@@ -151,13 +145,7 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].description").value(itemRequestDto.getDescription()))
                 .andExpect(jsonPath("$[0].requesterId").value(itemRequestDto.getRequesterId()))
-                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()))
-                .andExpect(jsonPath("$[0].items[0].id")
-                        .value(itemRequestDto.getItems().get(0).getId()))
-                .andExpect(jsonPath("$[0].items[0].name")
-                        .value(itemRequestDto.getItems().get(0).getName()))
-                .andExpect(jsonPath("$[0].items[0].description")
-                        .value(itemRequestDto.getItems().get(0).getDescription()));
+                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()));
     }
 
     @Test
@@ -171,13 +159,7 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].description").value(itemRequestDto.getDescription()))
                 .andExpect(jsonPath("$[0].requesterId").value(itemRequestDto.getRequesterId()))
-                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()))
-                .andExpect(jsonPath("$[0].items[0].id")
-                        .value(itemRequestDto.getItems().get(0).getId()))
-                .andExpect(jsonPath("$[0].items[0].name")
-                        .value(itemRequestDto.getItems().get(0).getName()))
-                .andExpect(jsonPath("$[0].items[0].description")
-                        .value(itemRequestDto.getItems().get(0).getDescription()));
+                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()));
     }
 
     @Test
@@ -191,13 +173,7 @@ public class ItemRequestControllerTest {
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].description").value(itemRequestDto.getDescription()))
                 .andExpect(jsonPath("$[0].requesterId").value(itemRequestDto.getRequesterId()))
-                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()))
-                .andExpect(jsonPath("$[0].items[0].id")
-                        .value(itemRequestDto.getItems().get(0).getId()))
-                .andExpect(jsonPath("$[0].items[0].name")
-                        .value(itemRequestDto.getItems().get(0).getName()))
-                .andExpect(jsonPath("$[0].items[0].description")
-                        .value(itemRequestDto.getItems().get(0).getDescription()));
+                .andExpect(jsonPath("$[0].created").value(itemRequestDto.getCreated()));
     }
 
     @Test
