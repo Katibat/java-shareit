@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Transactional
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ItemIntegrationTest {
+public class ItemsIntegrationTest {
     private final ItemService service;
     private final UserService userService;
 
@@ -29,9 +29,7 @@ public class ItemIntegrationTest {
         Item item3 = service.save(new Item(4L, "ItemName33", "item33Description",
                 true, null, null), user.getId());
         List<Item> itemList = service.getAllByOwnerId(1, 10, user.getId())
-                .stream()
-                .map(ItemMapper::toItem)
-                .collect(Collectors.toList());
+                .stream().map(ItemMapper::toItem).collect(Collectors.toList());
         System.out.println(itemList);
         Assertions.assertEquals(3, itemList.size());
         Assertions.assertEquals(item1.getName(), itemList.get(0).getName());
