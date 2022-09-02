@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class ItemIntegrationTest {
     private final ItemService service;
     private final UserService userService;
+    
     @Test
     public void findAllByOwner() {
         User user = userService.save(new User(1L, "nameIntegrate", "nameIntegrate@yandex.ru"));
