@@ -15,13 +15,13 @@ public interface ItemService {
 
     ItemDto getItemById(Long itemId, Long userId);
 
-    List<Item> getAllByOwnerId(Long userId);
+    List<ItemDto> getAllByOwnerId(int fromPage, int size, Long userId);
 
-    List<ItemDto> getAllByOwnerIdFull(Long userId);
-
-    List<Item> searchItems(String text);
+    List<ItemDto> searchItems(int fromPage, int size, String text);
 
     Comment saveComment(Long userId, Long itemId, Comment comment);
 
     List<Comment> getAllCommentsByItem(Long itemId);
+
+    List<Item> findItemsByRequestId(Long requestId);
 }

@@ -1,17 +1,18 @@
 package ru.practicum.shareit.request;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ItemRequestService {
 
-    ItemRequest save(ItemRequest itemRequest);
+    ItemRequest save(ItemRequest itemRequest, Long userId);
 
-    ItemRequest update(Long itemRequestId, ItemRequest itemRequest);
+    ItemRequest findById(Long itemRequestId);
 
-    void delete(Long itemRequestId);
+    ItemRequestDto getItemReguestById(Long userId, Long itemRequestId);
 
-    Optional<ItemRequest> findById(Long itemRequestId);
+    List<ItemRequestDto> getAllByUserId(Long userId);
 
-    List<ItemRequest> findAll();
+    List<ItemRequestDto> findAll(int fromPage, int size, Long userId);
+
+    void deleteById(Long itemRequestId);
 }

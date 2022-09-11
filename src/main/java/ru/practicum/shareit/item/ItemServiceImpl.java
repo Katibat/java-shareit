@@ -2,6 +2,9 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -87,31 +90,29 @@ public class ItemServiceImpl implements ItemService {
         return itemDto;
     }
 
-    @Override
-    public List<Item> getAllByOwnerId(Long userId) {
-        List<Item> itemList = repository.findAllByOwnerId(userId);
-        itemList.sort(Comparator.comparing(Item::getId));
-        return itemList;
-    }
-
-    @Override
-    public List<ItemDto> getAllByOwnerIdFull(Long userId) {
-        List<ItemDto> itemList = getAllByOwnerId(userId)
+    public List<ItemDto> getAllByOwnerId(int fromPage, int size, Long ownerId) {
+        userService.checkIsUserExists(ownerId);
+        Pageable pageable = PageRequest.of(fromPage / size, size, Sort.by(Sort.Direction.ASC, "id"));
+        List<ItemDto> itemList = repository.findAllByOwnerId(ownerId, pageable)
                 .stream()
                 .map(ItemMapper::toItemDto)
                 .collect(Collectors.toList());
         itemList.forEach(this::getLastAndNextBooking);
         itemList.forEach(this::getComments);
-        log.info("Передан список вещей {} их собственнику {}.", itemList, userId);
+        log.info("Передан список вещей {} их собственнику {}.", itemList, ownerId);
         return itemList;
     }
 
     @Override
-    public List<Item> searchItems(String text) {
+    public List<ItemDto> searchItems(int fromPage, int size, String text) {
         if (text.isBlank()) {
             return Collections.emptyList();
         }
-        return repository.searchItemsByTextInNameAndDescription(text);
+        Pageable pageable = PageRequest.of(fromPage / size, size);
+        return repository.searchItemsByTextInNameAndDescription(text, pageable)
+                .stream()
+                .map(ItemMapper::toItemDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -135,6 +136,7 @@ public class ItemServiceImpl implements ItemService {
         return commentRepository.findAllCommentsByItemId(itemId);
     }
 
+    @Transactional
     void getComments(ItemDto itemDto) {
         itemDto.setComments(getAllCommentsByItem(itemDto.getId()).stream()
                 .map(CommentMapper::toCommentDto)
@@ -157,5 +159,10 @@ public class ItemServiceImpl implements ItemService {
             log.info("Получено и сохранено время следующего бронирования для вещи № {} время: {}.",
                     itemDto.getId(), itemDto.getLastBooking());
         }
+    }
+
+    @Override
+    public List<Item> findItemsByRequestId(Long requestId) {
+        return repository.findByRequestId(requestId);
     }
 }
