@@ -15,8 +15,6 @@ import ru.practicum.shareit.comment.CommentMapper;
 import ru.practicum.shareit.comment.CommentRepository;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.request.ItemRequest;
-import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
