@@ -21,7 +21,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=purrrrrr
 
   db:
-    image: postgres:14
+    image: postgres:13.7-alpine
     ports:
       - "6541:5432"
     environment:
