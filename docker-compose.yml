@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - server
+    environment:
+      - SHAREIT_SERVER_URL=http://server:9090
+
+  server:
+    build: ./server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
+      - SPRING_DATASOURCE_USERNAME=shareit
+      - SPRING_DATASOURCE_PASSWORD=shareit
+      - SPRING_SQL_INIT_MODE=always
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=none
+
+  db:
+    image: postgres:14
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=shareit
+      - POSTGRES_USER=shareit
+      - POSTGRES_PASSWORD=shareit

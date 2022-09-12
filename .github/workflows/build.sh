@@ -1,1 +1,2 @@
-mvn verify -P check
+mvn install -P check,coverage
+docker-compose build
