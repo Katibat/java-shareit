@@ -5,7 +5,8 @@ import ru.practicum.shareit.comment.Comment;
 import java.util.List;
 
 public interface ItemService {
-    Item save(Item item, Long userId);
+
+    Item save(Long userId, Item item);
 
     Item update(Long userId, Item item);
 

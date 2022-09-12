@@ -27,23 +27,23 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> addItem(long userId, ItemDto itemDto) {
+    public ResponseEntity<Object> addItem(Long userId, ItemDto itemDto) {
         return post("", userId, itemDto);
     }
 
-    public ResponseEntity<Object> updateItem(long ownerId, ItemDto itemDto, long itemId) {
+    public ResponseEntity<Object> updateItem(Long ownerId, ItemDto itemDto, Long itemId) {
         return patch("/" + itemId, ownerId, itemDto);
     }
 
-    public ResponseEntity<Object> getItem(long userId, long itemId) {
-        return get("/" + userId, itemId);
+    public ResponseEntity<Object> getItem(Long itemId, Long userId) {
+        return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> deleteItem(long userId, long itemId) {
+    public ResponseEntity<Object> deleteItem(Long userId, Long itemId) {
         return delete("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> getAllItems(long userId, Integer from, Integer size) {
+    public ResponseEntity<Object> getAllItems(Long userId, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size
@@ -51,7 +51,7 @@ public class ItemClient extends BaseClient {
         return get("?from={from}&size={size}", userId, parameters);
     }
 
-    public ResponseEntity<Object> searchItems(long userId, String text, Integer from, Integer size) {
+    public ResponseEntity<Object> searchItems(Long userId, String text, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size,
@@ -60,7 +60,7 @@ public class ItemClient extends BaseClient {
         return get("/search?from={from}&size={size}&text={text}", userId, parameters);
     }
 
-    public ResponseEntity<Object> addComment(long userId, CommentDto commentDto, long itemId) {
+    public ResponseEntity<Object> addComment(Long userId, CommentDto commentDto, Long itemId) {
         return post("/" + itemId + "/comment", userId, commentDto);
     }
 }

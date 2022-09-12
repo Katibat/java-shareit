@@ -6,7 +6,7 @@ public interface ItemRequestService {
 
     ItemRequest save(ItemRequest itemRequest, Long userId);
 
-    ItemRequest findById(Long itemRequestId);
+    ItemRequest findById(Long userId, Long itemRequestId);
 
     ItemRequestDto getItemReguestById(Long userId, Long itemRequestId);
 

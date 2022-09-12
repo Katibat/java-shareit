@@ -31,16 +31,16 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     }
 
     @Override
-    public ItemRequest findById(Long itemRequestId) {
+    public ItemRequest findById(Long userId, Long itemRequestId) {
         return repository.findById(itemRequestId)
                 .orElseThrow(() ->
-                        new NotFoundException("Не найдена запрос вещи с идентификатором № " + itemRequestId));
+                        new NotFoundException("Не найден запрос вещи с идентификатором № " + itemRequestId));
     }
 
     @Override
     public ItemRequestDto getItemReguestById(Long userId, Long itemRequestId) {
         userService.checkIsUserExists(userId);
-        ItemRequest itemRequest = findById(itemRequestId);
+        ItemRequest itemRequest = findById(userId, itemRequestId);
         ItemRequestDto itemRequestDto = ItemRequestsMapper.toItemRequestDto(itemRequest);
         itemRequestDto.setItems(itemRepository.findByRequestId(itemRequestId).stream()
                 .map(ItemMapper::toItemDto).collect(Collectors.toList()));

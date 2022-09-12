@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.comment.Comment;
 import ru.practicum.shareit.comment.CommentDto;
 import ru.practicum.shareit.comment.CommentMapper;
+import ru.practicum.shareit.request.ItemRequestService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -18,12 +19,18 @@ import java.util.List;
 @RequestMapping("/items")
 public class ItemController {
     private final ItemService service;
+    private final ItemRequestService itemRequestService;
 
     @PostMapping // добавить новую вещь
     public ItemDto create(@Valid @RequestBody ItemDto itemDto,
                           @RequestHeader(name = "X-Sharer-User-Id") Long userId) {
         Item item = ItemMapper.toItemNew(itemDto);
-        return ItemMapper.toItemDto(service.save(item, userId));
+        if (itemDto.getRequestId() != null) {
+            item.setRequest(itemRequestService.findById(userId, itemDto.getRequestId()));
+        }
+        item = service.save(userId, item);
+        return ItemMapper.toItemDto(item);
+
     }
 
     @PatchMapping("/{itemId}") // редактировать вещь по идентификатору

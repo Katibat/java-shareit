@@ -15,6 +15,8 @@ import ru.practicum.shareit.comment.CommentMapper;
 import ru.practicum.shareit.comment.CommentRepository;
 import ru.practicum.shareit.exception.ValidationException;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
@@ -34,9 +36,8 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public Item save(Item item, Long userId) {
+    public Item save(Long userId, Item item) {
         item.setOwner(userService.findById(userId));
-        log.info("Создана вещь № {} пользователем № {}.", item.getId(), userId);
         return repository.save(item);
     }
 

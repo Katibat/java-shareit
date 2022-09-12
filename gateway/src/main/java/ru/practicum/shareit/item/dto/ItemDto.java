@@ -4,7 +4,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDto {
@@ -14,4 +14,5 @@ public class ItemDto {
     private String description;
     @NotNull
     private Boolean available;
+    private Long requestId;
 }
