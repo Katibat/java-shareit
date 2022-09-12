@@ -24,28 +24,24 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<Object> getAllUserBookings(@RequestHeader("X-Sharer-User-Id") @Positive long userId,
-                                                     @RequestParam(name = "state", defaultValue = "all") String state,
-                                                     @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
-                                                         Integer from,
-                                                     @Positive @RequestParam(name = "size", defaultValue = "10")
-                                                         Integer size) {
+                                                     @RequestParam(defaultValue = "ALL") String state,
+                                                     @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                     @Positive @RequestParam(defaultValue = "10") Integer size) {
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + state));
         log.info("Get users bookings, userId={}", userId);
-        return bookingClient.getAllUserBookings(from, size, userId, bookingState);
+        return bookingClient.getAllUserBookings(userId, bookingState, from, size);
     }
 
-    @GetMapping
+    @GetMapping("/owner")
     public ResponseEntity<Object> getAllOwnerBookings(@RequestHeader("X-Sharer-User-Id") @Positive long userId,
                                                       @RequestParam(name = "state", defaultValue = "all") String state,
-                                                      @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
-                                                          Integer from,
-                                                      @Positive @RequestParam(name = "size", defaultValue = "10")
-                                                          Integer size) {
+                                                      @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                      @Positive @RequestParam(defaultValue = "10") Integer size) {
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + state));
         log.info("Get owner bookings, userId={}", userId);
-        return bookingClient.getAllOwnerBookings(from, size, userId, bookingState);
+        return bookingClient.getAllOwnerBookings(userId, bookingState, from, size);
     }
 
     @PostMapping
