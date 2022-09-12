@@ -28,7 +28,7 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> getRequest(@RequestHeader("X-Sharer-User-Id") @Positive long userId,
-                                                 @PathVariable long requestId) {
+                                             @PathVariable long requestId) {
         log.info("Get request {}, userId={}", requestId, userId);
         return requestClient.getRequest(requestId, userId);
     }
@@ -41,10 +41,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public ResponseEntity<Object> getAllRequests(@RequestHeader("X-Sharer-User-Id") @Positive long userId,
-                                                      @PositiveOrZero @RequestParam(name = "from", defaultValue = "0")
-                                                      Integer from,
-                                                      @Positive @RequestParam(name = "size", defaultValue = "10")
-                                                          Integer size) {
+                                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
+                                                 @Positive @RequestParam(defaultValue = "10") Integer size) {
         log.info("Get all requests, userId={}", userId);
         return requestClient.getAllRequests(userId, from, size);
     }

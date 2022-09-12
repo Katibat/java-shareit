@@ -47,7 +47,7 @@ public class BookingController {
                                            @RequestParam(defaultValue = "10") @Positive int size,
                                            @RequestHeader("X-Sharer-User-Id") Long userId,
                                            @RequestParam(defaultValue = "ALL") String state) {
-        return service.findAllByBooker(fromPage, size, userId, state);
+        return service.findAllByBooker(userId, state, fromPage, size);
     }
 
     @GetMapping("/owner") // получить список всех бронирований собственника вещей
@@ -56,6 +56,6 @@ public class BookingController {
                                            @RequestParam(defaultValue = "10") @Positive int size,
                                            @RequestHeader("X-Sharer-User-Id") Long userId,
                                            @RequestParam(defaultValue = "ALL") String state) {
-        return service.findAllByOwner(fromPage, size, userId, state);
+        return service.findAllByOwner(userId, state, fromPage, size);
     }
 }

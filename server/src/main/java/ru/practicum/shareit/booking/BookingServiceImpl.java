@@ -109,7 +109,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> findAllByBooker(int fromPage, int size, Long userId, String state) {
+    public List<BookingDto> findAllByBooker(Long userId, String state, int fromPage, int size) {
         userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;
@@ -144,7 +144,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public List<BookingDto> findAllByOwner(int fromPage, int size, Long userId, String state) {
+    public List<BookingDto> findAllByOwner(Long userId, String state, int fromPage, int size) {
         userService.checkIsUserExists(userId);
         List<Booking> bookingsList = new ArrayList<>();
         BookingState bookingState;

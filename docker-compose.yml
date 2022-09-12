@@ -17,10 +17,8 @@ services:
       - db
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
-      - SPRING_DATASOURCE_USERNAME=shareit
-      - SPRING_DATASOURCE_PASSWORD=shareit
-#      - SPRING_SQL_INIT_MODE=always
-#      - SPRING_JPA_HIBERNATE_DDL-AUTO=none
+      - SPRING_DATASOURCE_USERNAME=Kate
+      - SPRING_DATASOURCE_PASSWORD=purrrrrr
 
   db:
     image: postgres:14
