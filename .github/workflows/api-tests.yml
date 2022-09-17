@@ -1,4 +1,4 @@
-name: Films API Tests
+name: ShareIt API Tests
 
 on:
   pull_request:
